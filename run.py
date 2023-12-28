@@ -13,31 +13,6 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('name_sheet')
 
 
-def get_sheet_data():
-    """
-    Get data from the names sheet.
-    Each entry in the data includes the username, score, and index.
-    """
-    try:
-        names_sheet = SHEET.get_worksheet(0)
-        records = names_sheet.get_all_records()
-        data = [
-            {
-                'username': entry['username'],
-                'score': entry['score'],
-                'index': i + 2
-            }
-            for i, entry in enumerate(records)
-        ]
-        return data
-    except Exception as e:
-        print(f"Error retrieving sheet data: {e}")
-        return []
-
-
-get_sheet_data()
-
-
 def Introduction():
     """
     Message to appear when game is started.
@@ -61,32 +36,34 @@ def Introduction():
 Introduction()
 
 
-def create_user(existing_user=None):
+def create_user():
     """
-    Create new user.
-    Get existing user from sheet.
+    User creation
+    Get user from existing save
     """
     while True:
-        if existing_user:
-            print(f"Hmm? {existing_user}, Didn't you, nevermind welcome back!")
-            return existing_user
+        username = input("Ahh where are my manners, what's your name?\n")
 
-        data_user = input("Ahh where are my manners... What is your name?\n")
+        names_sheet = SHEET.worksheet('names')
+        saved_user_v = names_sheet.acell('A2')
+        
+        # Get any saved users from google sheet.
+        saved_user = saved_user_v.value.strip() if saved_user_v.value else None
 
-        # Check if the user is already saved in the sheet
-        user_saved = any(
-            entry['names'] == data_user for entry in get_sheet_data()
-        )
-
-        if user_saved:
-            print(f"Hmm? {data_user}, Didn't you, nevermind welcome back!")
-            return data_user
+        if saved_user is not None and username == saved_user:
+            print(f"Hmm? {saved_user} didn't you.. nevermind welcome back!")
+            break
         else:
-            print(f"hehe thats a good one! {data_user} Let's play!\n")
-            return data_user
+            print("That's a good name to add to the collec... Welcome! hehehe")
+            break
+
+    print(f"Well then {username}, let's get started!")
+
+    # Open the names sheet
+    names_sheet = SHEET.worksheet('names')
+    names_sheet.update_acell('A2', username)
 
 
-create_user(existing_user=None)
-
+create_user()
 
 

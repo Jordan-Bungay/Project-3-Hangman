@@ -13,6 +13,31 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('name_sheet')
 
 
+def get_sheet_data():
+    """
+    Get data from the names sheet.
+    Each entry in the data includes the username, score, and index.
+    """
+    try:
+        names_sheet = SHEET.get_worksheet(0)
+        records = names_sheet.get_all_records()
+        data = [
+            {
+                'username': entry['username'],
+                'score': entry['score'],
+                'index': i + 2
+            }
+            for i, entry in enumerate(records)
+        ]
+        return data
+    except Exception as e:
+        print(f"Error retrieving sheet data: {e}")
+        return []
+
+
+get_sheet_data()
+
+
 def Introduction():
     """
     Message to appear when game is started.

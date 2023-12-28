@@ -34,3 +34,34 @@ def Introduction():
 
 
 Introduction()
+
+
+def create_user(existing_user=None):
+    """
+    Create new user.
+    Get existing user from sheet.
+    """
+    while True:
+        if existing_user:
+            print(f"Hmm? {existing_user}, Didn't you, nevermind welcome back!")
+            return existing_user
+
+        data_user = input("Ahh where are my manners... What is your name?\n")
+
+        # Check if the user is already saved in the sheet
+        user_saved = any(
+            entry['names'] == data_user for entry in get_sheet_data()
+        )
+
+        if user_saved:
+            print(f"Hmm? {data_user}, Didn't you, nevermind welcome back!")
+            return data_user
+        else:
+            print(f"hehe thats a good one! {data_user} Let's play!\n")
+            return data_user
+
+
+create_user(existing_user=None)
+
+
+

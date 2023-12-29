@@ -46,7 +46,7 @@ def create_user():
 
         names_sheet = SHEET.worksheet('names')
         saved_user_v = names_sheet.acell('A2')
-        
+
         # Get any saved users from google sheet.
         saved_user = saved_user_v.value.strip() if saved_user_v.value else None
 
@@ -67,4 +67,25 @@ def create_user():
 create_user()
 
 
+def start_hangman():
+    '''
+    Start playing out the hangman game.
+    '''
+    introduction_executed = False  # Has the introduction been displayed
+    saved_user = None
 
+    # Main loop for the game
+    while True:
+        # Ask the user if they want to start the game
+        start_game = input(
+            "\nAre you ready? hehe (Y/N):\n"
+        ).upper()
+        break
+
+        # If the user chooses not to play, exit the game
+        if start_game != "Y":
+            print("Aww leaving so soon... well then bye bye")
+            break
+
+
+start_hangman()

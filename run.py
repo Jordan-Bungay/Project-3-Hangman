@@ -1,5 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
+import random
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -11,6 +12,8 @@ CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('name_sheet')
+CORRECT_GUESS_SCORE = 10
+INCORRECT_GUESS_PENALTY = 5
 
 
 def Introduction():
@@ -117,7 +120,7 @@ def update_score(username, score):
         print(f"Score update error: {e}")
 
 
-def choose_word():
+def random_word():
     """
     Get a word from the words.txt and set it to uppercase.
     """
@@ -130,15 +133,25 @@ def choose_word():
         exit()
 
 
-def initialize_display(word):
+def hidden_word_underline(word):
     """
     Creates the underline for the hidden word.
     """
     return ["_" for _ in word]
 
 
-def is_valid_input(chosen_letter):
+def check_valid_letter(chosen_letter):
     """
     Checks if the letter that has been input is valid.
     """
     return chosen_letter.isalpha() and len(chosen_letter) == 1
+
+
+def calculate_score(correct_guesses, incorrect_guesses):
+    """
+    Calculate the player's score.
+    """
+    return (
+        correct_guesses * CORRECT_GUESS_SCORE  # Constant variable
+        - incorrect_guesses * INCORRECT_GUESS_PENALTY  # Constant variable
+    )

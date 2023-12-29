@@ -92,11 +92,11 @@ def update_score(username, score):
         name_sheet = SHEET.get_worksheet(0)
         data = get_sheet_data()
 
-        # Check if the username already exists in the sheet
+        # Is there already a saved user
         saved_username = any(entry['username'] == username for entry in data)
 
         if saved_username:
-            # If the user exists, update the existing row with the new score
+            # Updates the saved players score with the new score
             for entry in data:
                 if entry['username'] == username:
                     entry['score'] += score
@@ -104,17 +104,30 @@ def update_score(username, score):
                     print(f"Updated score for {username} to {entry['score']}")
                     break
         else:
-            # If the user doesn't exist, add a new row for the user
+            # If there is not a saved user, add a new user
             new_user = [username, score]
             name_sheet.append_row(new_user)
             print(f"Added a new row for {username} with the score {score}")
 
-            # Update the local data with the new row
-            data = get_sheet_data()  # Refresh the local data
+            # Update the local data with the new data
+            data = get_sheet_data()
 
         print("Your score has been updated")
     except Exception as e:
         print(f"Score update error: {e}")
+
+
+def choose_word():
+    """
+    Get a word from the words.txt and set it to uppercase.
+    """
+    try:
+        with open("words.txt", "r") as file:
+            rand_words = file.readlines()
+        return random.choice(rand_words).strip().upper()
+    except FileNotFoundError:
+        print("words.txt could not be found. Make sure the file exists.")
+        exit()
 
 
 

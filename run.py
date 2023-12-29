@@ -130,4 +130,8 @@ def choose_word():
         exit()
 
 
-
+def initialize_display(word):
+    """
+    Creates the underline for the hidden word.
+    """
+    return ["_" for _ in word]

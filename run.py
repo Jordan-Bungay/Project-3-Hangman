@@ -92,4 +92,29 @@ def start_hangman():
 start_hangman()
 
 
+def choose_word():
+    """
+    Read a list of words from a text file and
+    randomly select one word and converted to uppercase.
+    """
+    try:
+        with open("words.txt", "r") as file:
+            word_list = file.readlines()
+        return random.choice(word_list).strip().upper()
+    except FileNotFoundError:
+        print("Error: 'words.txt' not found. Make sure the file exists.")
+        exit()
 
+
+def initialize_display(word):
+    """
+    Initializes a display for a word by creating a list of underscores.
+    """
+    return ["_" for _ in word]
+
+
+def is_valid_input(guessed_letter):
+    """
+    Checks if the inputted guessed letter is valid.
+    """
+    return guessed_letter.isalpha() and len(guessed_letter) == 1

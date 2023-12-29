@@ -1,0 +1,10 @@
+html
+coding
+python
+Hangman
+names
+computer
+java
+game
+win
+lose

@@ -36,4 +36,26 @@ def Introduction():
 Introduction()
 
 
+def create_user(saved_user=None):
+    """
+    Ask the user for their name.
+    Get saved user if already played.
+    """
+    while True:
+        if saved_user:
+            print(f"Hm? {saved_user} didn't you.. Nevermind, welcome back!")
+            return saved_user
 
+        user_data = input("Ahh where are me manners! What's your name?\n")
+
+        # Check if the username already exists in the sheet
+        saved_username = any(
+            entry['username'] == user_data for entry in get_sheet_data()
+        )
+
+        if saved_username:
+            print(f"Hm? {saved_user} didn't you.. Nevermind, welcome back!")
+            return user_data
+        else:
+            print(f"{data_username} Good name to add to my colle.. welcome!\n")
+            return user_data

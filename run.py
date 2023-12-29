@@ -135,3 +135,10 @@ def initialize_display(word):
     Creates the underline for the hidden word.
     """
     return ["_" for _ in word]
+
+
+def is_valid_input(chosen_letter):
+    """
+    Checks if the letter that has been input is valid.
+    """
+    return chosen_letter.isalpha() and len(chosen_letter) == 1

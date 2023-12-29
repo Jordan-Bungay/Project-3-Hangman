@@ -81,3 +81,40 @@ def get_sheet_data():
     except Exception as e:
         print(f"Getting data from sheet error: {e}")
         return []
+
+
+def update_score(username, score):
+    """
+    Update the name_sheet with new username and score.
+    If the username already exists, add the new score to the old score.
+    """
+    try:
+        name_sheet = SHEET.get_worksheet(0)
+        data = get_sheet_data()
+
+        # Check if the username already exists in the sheet
+        saved_username = any(entry['username'] == username for entry in data)
+
+        if saved_username:
+            # If the user exists, update the existing row with the new score
+            for entry in data:
+                if entry['username'] == username:
+                    entry['score'] += score
+                    name_sheet.update_cell(entry['index'], 2, entry['score'])
+                    print(f"Updated score for {username} to {entry['score']}")
+                    break
+        else:
+            # If the user doesn't exist, add a new row for the user
+            new_user = [username, score]
+            name_sheet.append_row(new_user)
+            print(f"Added a new row for {username} with the score {score}")
+
+            # Update the local data with the new row
+            data = get_sheet_data()  # Refresh the local data
+
+        print("Your score has been updated")
+    except Exception as e:
+        print(f"Score update error: {e}")
+
+
+

@@ -1,6 +1,5 @@
 import gspread
 from google.oauth2.service_account import Credentials
-import random
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -37,84 +36,4 @@ def Introduction():
 Introduction()
 
 
-def create_user():
-    """
-    User creation
-    Get user from existing save
-    """
-    while True:
-        username = input("Ahh where are my manners, what's your name?\n")
 
-        names_sheet = SHEET.worksheet('names')
-        saved_user_v = names_sheet.acell('A2')
-
-        # Get any saved users from google sheet.
-        saved_user = saved_user_v.value.strip() if saved_user_v.value else None
-
-        if saved_user is not None and username == saved_user:
-            print(f"Hmm? {saved_user} didn't you.. nevermind welcome back!")
-            break
-        else:
-            print("That's a good name to add to the collec... Welcome! hehehe")
-            break
-
-    print(f"Well then {username}, let's get started!")
-
-    # Open the names sheet
-    names_sheet = SHEET.worksheet('names')
-    names_sheet.update_acell('A2', username)
-
-
-create_user()
-
-
-def start_hangman():
-    '''
-    Start playing out the hangman game.
-    '''
-    introduction_executed = False  # Has the introduction been displayed
-    saved_user = None
-
-    # Main loop for the game
-    while True:
-        # Ask the user if they want to start the game
-        start_game = input(
-            "\nAre you ready? hehe (Y/N):\n"
-        ).upper()
-        break
-
-        # If the user chooses not to play, exit the game
-        if start_game != "Y":
-            print("Aww leaving so soon... well then bye bye")
-            break
-
-
-start_hangman()
-
-
-def choose_word():
-    """
-    Read a list of words from a text file and
-    randomly select one word and converted to uppercase.
-    """
-    try:
-        with open("words.txt", "r") as file:
-            word_list = file.readlines()
-        return random.choice(word_list).strip().upper()
-    except FileNotFoundError:
-        print("Error: 'words.txt' not found. Make sure the file exists.")
-        exit()
-
-
-def initialize_display(word):
-    """
-    Initializes a display for a word by creating a list of underscores.
-    """
-    return ["_" for _ in word]
-
-
-def is_valid_input(guessed_letter):
-    """
-    Checks if the inputted guessed letter is valid.
-    """
-    return guessed_letter.isalpha() and len(guessed_letter) == 1

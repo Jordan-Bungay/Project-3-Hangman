@@ -59,3 +59,25 @@ def create_user(saved_user=None):
         else:
             print(f"{data_username} Good name to add to my colle.. welcome!\n")
             return user_data
+
+
+def get_sheet_data():
+    """
+    Get data from the name_sheet.
+    Each entry in the data includes the username, score, and index.
+    """
+    try:
+        name_sheet = SHEET.get_worksheet(0)
+        records = name_sheet.get_all_records()
+        data = [
+            {
+                'username': entry['username'],
+                'score': entry['score'],
+                'index': i + 2
+            }
+            for i, entry in enumerate(records)
+        ]
+        return data
+    except Exception as e:
+        print(f"Getting data from sheet error: {e}")
+        return []

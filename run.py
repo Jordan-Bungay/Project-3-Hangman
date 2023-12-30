@@ -213,3 +213,50 @@ def ready_to_play_status():
             return False
         else:
             print("Hmm? I don't understand.. did you say 'Y' or 'N'?")
+
+
+def play_game(username):
+    """
+    Play out the game.
+    Putting together most of the functons to play the game out
+    """
+    chosen_word = random_word()  # Choose a random word
+    display = initialize_display(chosen_word)  # Underline the hidden word
+
+    # Variables
+    lives = 6
+    chosen_letters = []
+    correct_guesses = 0
+    incorrect_guesses = 0
+    game_over = False
+
+    print("He he he what is the word?: " + " ".join(display))
+    while not game_over:
+        print("Ooh interesting!, you chose: " + ' '.join(chosen_letters))
+        # Play a turn and get the updated state
+        lives, chosen_letters, display, letter_chosen = play_turn(
+            chosen_word, lives, chosen_letters, display
+        )
+
+        # Calculate score
+        score = calculate_score(correct_guesses, incorrect_guesses)
+
+        # Update the counters based on the result of the turn
+        if letter_chosen:
+            correct_guesses += 1
+        else:
+            incorrect_guesses += 1
+
+        print("He he he what is the word?: " + " ".join(display))
+
+        # Check if the word has been completely guessed
+        if "_" not in display:
+            game_over = True
+            score = calculate_score(correct_guesses, incorrect_guesses)
+            print(f"\nDamn! I mean well done! The word was: {chosen_word}")
+            print(f"Your score: {score}")
+        elif lives == 0:
+            game_over = True
+            print("\nHa Ha time to get Hang, Man The word was: " + chosen_word)
+
+    return score

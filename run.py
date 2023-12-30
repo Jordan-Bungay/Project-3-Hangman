@@ -9,12 +9,35 @@ SCOPE = [
     "https://www.googleapis.com/auth/drive"
     ]
 
+# Define the constant variables
 CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('name_sheet')
 CORRECT_GUESS_SCORE = 10
 INCORRECT_GUESS_PENALTY = 5
+
+
+def get_sheet_data():
+    """
+    Get data from the name_sheet.
+    Each entry in the data includes the username, score, and index.
+    """
+    try:
+        name_sheet = SHEET.get_worksheet(0)
+        records = name_sheet.get_all_records()
+        data = [
+            {
+                'username': entry['username'],
+                'score': entry['score'],
+                'index': i + 2
+            }
+            for i, entry in enumerate(records)
+        ]
+        return data
+    except Exception as e:
+        print(f"Getting data from sheet error: {e}")
+        return []
 
 
 def introduction():
@@ -29,15 +52,12 @@ def introduction():
     print()
     print("I'll give you a little info before we start:")
     print()
-    print("1. Underscores signify each letter that makes up the hidden word.")
-    print("2. Type a letter to start guessing the word.")
-    print("3. Correct letters guessed, reveal all letter(s) in the word.")
-    print("4. Each wrong guess and I will start to set up the HANGMAN he he")
-    print("5. 6 incorrect guesses, you can guess what happens... (you lose).")
-    print("6. Enjoy! he he he...")
-
-
-introduction()
+    print("Underscores signify each letter that makes up the hidden word.")
+    print("Type a letter to start guessing the word.")
+    print("Correct letters guessed, reveal all letter(s) in the word.")
+    print("Each wrong guess and I will start to set up the HANGMAN he he")
+    print("6 incorrect guesses, you can guess what happens... (you lose).")
+    print("Enjoy! he he he...")
 
 
 def create_user(saved_user=None):
@@ -65,26 +85,14 @@ def create_user(saved_user=None):
             return user_data
 
 
-def get_sheet_data():
+def calculate_score(correct_guesses, incorrect_guesses):
     """
-    Get data from the name_sheet.
-    Each entry in the data includes the username, score, and index.
+    Calculate the player's score.
     """
-    try:
-        name_sheet = SHEET.get_worksheet(0)
-        records = name_sheet.get_all_records()
-        data = [
-            {
-                'username': entry['username'],
-                'score': entry['score'],
-                'index': i + 2
-            }
-            for i, entry in enumerate(records)
-        ]
-        return data
-    except Exception as e:
-        print(f"Getting data from sheet error: {e}")
-        return []
+    return (
+        correct_guesses * CORRECT_GUESS_SCORE
+        - incorrect_guesses * INCORRECT_GUESS_PENALTY
+    )
 
 
 def update_score(username, score):
@@ -148,14 +156,38 @@ def check_valid_letter(chosen_letter):
     return chosen_letter.isalpha() and len(chosen_letter) == 1
 
 
-def calculate_score(correct_guesses, incorrect_guesses):
+def get_chosen_letter(chosen_letters):
     """
-    Calculate the player's score.
+    Gets the chosen letters.
     """
-    return (
-        correct_guesses * CORRECT_GUESS_SCORE  # Constant variable
-        - incorrect_guesses * INCORRECT_GUESS_PENALTY  # Constant variable
-    )
+    return input("What's you guess?: \n").upper()
+
+
+def update_display(chosen_word, chosen_letter, display):
+    """
+    Changes what is shown depending on the answer given by the user.
+    """
+    letter_chosen = False
+    for position in range(len(chosen_word)):
+        letter = chosen_word[position]
+        if letter == chosen_letter:
+            display[position] = chosen_word[position]
+            letter_chosen = True
+    return letter_chosen
+
+
+def ready_to_play_status():
+    """
+    Ask the user if they want to play again
+    """
+    while True:
+        decision = input("\nAre you ready? heh heh [Y/N]? \n").upper()
+        if decision == "Y":
+            return True
+        elif decision == "N":
+            return False
+        else:
+            print("Hmm? I don't understand.. did you say 'Y' or 'N'?")
 
 
 def execute_game():
@@ -200,20 +232,6 @@ def execute_game():
             if play_again != "Y":
                 print("Aww leaving so soon.. see you again soon hehe, bye bye")
                 return
-
-
-def ready_to_play_status():
-    """
-    Ask the user if they want to play again
-    """
-    while True:
-        user_input = input("\nAre you ready? heh heh [Y/N]? \n").upper()
-        if user_input == "Y":
-            return True
-        elif user_input == "N":
-            return False
-        else:
-            print("Hmm? I don't understand.. did you say 'Y' or 'N'?")
 
 
 def play_game(username):
@@ -262,7 +280,7 @@ def play_game(username):
     return score
 
 
-def play_turn(chosen_word, lives, guessed_letters, display):
+def play_turn(chosen_word, lives, chosen_letters, display):
     """
     Plays a single turn of the game.
     """
@@ -293,26 +311,6 @@ def play_turn(chosen_word, lives, guessed_letters, display):
         print("\nooh that would be a correct answer...")
 
     return lives, chosen_letters, display, letter_chosen
-
-
-def get_chosen_letter(chosen_letters):
-    """
-    Gets the chosen letters.
-    """
-    return input("What's you guess?: \n").upper()
-
-
-def update_display(chosen_word, chosen_letter, display):
-    """
-    Changes what is shown depending on the answer given by the user.
-    """
-    letter_chosen = False
-    for position in range(len(chosen_word)):
-        letter = chosen_word[position]
-        if letter == chosen_letter:
-            display[position] = chosen_word[position]
-            letter_chosen = True
-    return letter_chosen
 
 
 execute_game()

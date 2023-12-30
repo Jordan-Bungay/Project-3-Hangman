@@ -58,10 +58,10 @@ def create_user(saved_user=None):
         )
 
         if saved_username:
-            print(f"Hm? {saved_user} didn't you.. Nevermind, welcome back!")
+            print(f"Hm? {user_data} didn't you.. Nevermind, welcome back!")
             return user_data
         else:
-            print(f"{data_username} Good name to add to my colle.. welcome!\n")
+            print(f"{user_data} Good name to add to my colle.. welcome!\n")
             return user_data
 
 
@@ -222,7 +222,7 @@ def play_game(username):
     Putting together most of the functons to play the game out
     """
     chosen_word = random_word()  # Choose a random word
-    display = initialize_display(chosen_word)  # Underline the hidden word
+    display = hidden_word_underline(chosen_word)  # Underline the hidden word
 
     # Variables
     lives = 6
@@ -315,4 +315,4 @@ def update_display(chosen_word, chosen_letter, display):
     return letter_chosen
 
 
-execute_hangman_game()
+execute_game()

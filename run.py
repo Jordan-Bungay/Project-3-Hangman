@@ -181,7 +181,7 @@ def ready_to_play_status():
     Ask the user if they want to play again
     """
     while True:
-        decision = input("\nAre you ready? heh heh [Y/N]? \n").upper()
+        decision = input("\nLet's go then?! [Y/N]? \n").upper()
         if decision == "Y":
             return True
         elif decision == "N":

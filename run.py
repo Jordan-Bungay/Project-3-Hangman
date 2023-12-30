@@ -16,7 +16,7 @@ CORRECT_GUESS_SCORE = 10
 INCORRECT_GUESS_PENALTY = 5
 
 
-def Introduction():
+def introduction():
     """
     Message to appear when game is started.
     Instructions on how to play.
@@ -36,7 +36,7 @@ def Introduction():
     print("6. Enjoy! he he he...")
 
 
-Introduction()
+introduction()
 
 
 def create_user(saved_user=None):
@@ -155,3 +155,28 @@ def calculate_score(correct_guesses, incorrect_guesses):
         correct_guesses * CORRECT_GUESS_SCORE  # Constant variable
         - incorrect_guesses * INCORRECT_GUESS_PENALTY  # Constant variable
     )
+
+
+def execute_game():
+    '''
+    Handle the execution of the hangman game.
+    '''
+    introduction_executed = False
+    saved_user = None
+
+    while True:
+        # Execute the introduction if it hasn't been shown yet
+        if not introduction_executed:
+            introduction()
+            introduction_executed = True
+
+        # Choices to start the game or not
+        start_game = input(
+            "\nAre you ready? heh heh (Y/N):\n"
+        ).upper()
+
+        if start_game != "Y":
+            print("Aww leaving so soon... see you again soon he he, bye bye")
+            break
+
+        

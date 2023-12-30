@@ -1,6 +1,7 @@
 import gspread
 from google.oauth2.service_account import Credentials
 import random
+import hangman_stages
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -292,3 +293,26 @@ def play_turn(chosen_word, lives, guessed_letters, display):
         print("\nooh that would be a correct answer...")
 
     return lives, chosen_letters, display, letter_chosen
+
+
+def get_chosen_letter(chosen_letters):
+    """
+    Gets the chosen letters.
+    """
+    return input("What's you guess?: \n").upper()
+
+
+def update_display(chosen_word, chosen_letter, display):
+    """
+    Changes what is shown depending on the answer given by the user.
+    """
+    letter_chosen = False
+    for position in range(len(chosen_word)):
+        letter = chosen_word[position]
+        if letter == chosen_letter:
+            display[position] = chosen_word[position]
+            letter_chosen = True
+    return letter_chosen
+
+
+execute_hangman_game()

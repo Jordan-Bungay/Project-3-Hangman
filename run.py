@@ -181,10 +181,21 @@ def execute_game():
 
         # Multiple rounds loop
         while True:
-            ready_to_play = get_ready_status()
+            ready_to_play = ready_to_play_status()
 
             if not ready_to_play:
                 print("Aww leaving so soon.. see you again soon hehe, bye bye")
                 return
 
-            
+            username = create_user(saved_user)
+            score = play_game(username)
+            update_score(username, score)
+            saved_user = username
+
+            play_again = input(
+                "\nCome on you know you want to play again? hehehe (Y/N):\n"
+            ).upper()
+
+            if play_again != "Y":
+                print("Aww leaving so soon.. see you again soon hehe, bye bye")
+                return

@@ -199,3 +199,17 @@ def execute_game():
             if play_again != "Y":
                 print("Aww leaving so soon.. see you again soon hehe, bye bye")
                 return
+
+
+def ready_to_play_status():
+    """
+    Ask the user if they want to play again
+    """
+    while True:
+        user_input = input("\nAre you ready? heh heh [Y/N]? \n").upper()
+        if user_input == "Y":
+            return True
+        elif user_input == "N":
+            return False
+        else:
+            print("Hmm? I don't understand.. did you say 'Y' or 'N'?")

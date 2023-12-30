@@ -241,7 +241,6 @@ def play_game(username):
         # Calculate score
         score = calculate_score(correct_guesses, incorrect_guesses)
 
-        # Update the counters based on the result of the turn
         if letter_chosen:
             correct_guesses += 1
         else:
@@ -249,7 +248,7 @@ def play_game(username):
 
         print("He he he what is the word?: " + " ".join(display))
 
-        # Check if the word has been completely guessed
+        # Check if the hidden word has been guessed correctly
         if "_" not in display:
             game_over = True
             score = calculate_score(correct_guesses, incorrect_guesses)
@@ -260,3 +259,36 @@ def play_game(username):
             print("\nHa Ha time to get Hang, Man The word was: " + chosen_word)
 
     return score
+
+
+def play_turn(chosen_word, lives, guessed_letters, display):
+    """
+    Plays a single turn of the game.
+    """
+    print("\nBe careful he he, you have:", lives)
+
+    # Letter chosen by the player
+    chosen_letter = get_chosen_letter(chosen_letters)
+
+    if not check_valid_letter(chosen_letter):
+        print("Hmm? I don't understand what letter from A-Z did you say?")
+        return lives, chosen_letters, display, False
+
+    if chosen_letter in chosen_letters:
+        print("Are you trying to trick me? You have already said that letter.")
+        return lives, chosen_letters, display, False
+
+    # Update chosen letter in chosen letters
+    chosen_letters.append(chosen_letter)
+    letter_chosen = update_display(chosen_word, chosen_letter, display)
+
+    # If the chosen_letter is incorrect, show the hangman stage
+    if not letter_chosen:
+        lives -= 1
+        print("\nWrong! That's one step closer to Hangman he he.")
+        print("Hangman stage:")
+        print(hangman_stages.stages[lives])
+    else:
+        print("\nooh that would be a correct answer...")
+
+    return lives, chosen_letters, display, letter_chosen

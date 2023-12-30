@@ -179,4 +179,12 @@ def execute_game():
             print("Aww leaving so soon... see you again soon he he, bye bye")
             break
 
-        
+        # Multiple rounds loop
+        while True:
+            ready_to_play = get_ready_status()
+
+            if not ready_to_play:
+                print("Aww leaving so soon.. see you again soon hehe, bye bye")
+                return
+
+            

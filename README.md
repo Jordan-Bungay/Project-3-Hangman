@@ -4,13 +4,13 @@ I have created this Hangman game to show my ability to work with Python.
 
 Hangman is a game where you have to find the hidden word by trying different letters one-by-one to eventually uncover the whole word. Each correct letter will reveal part of the word and each incorrect answer will add a part to the hangman picture, 6 incorrect guesses and you lose.
 
-![Preview for the website on different screen sizes](assets/readme-assets/project-2-display.png)
+![Preview for the website on different screen sizes](assets/readme-assets/project-3-display.webp)
 
-### The live website can be seen by clicking [here](https://jordan-bungay.github.io/Project-2-Rock-Paper-Scissors/)
+### The live website can be seen by clicking [here](https://project-3-hang-man-8c9de00b3c14.herokuapp.com/)
 
 ## UX
 
-I want this game to be a fun introduction to the rock, paper and scissors game, showing you how its played through a fun interactive way. I want the user to enjoy learning the game through the exciring text and fun buttons to press.
+I want this game to be a fun introduction to the Hangman game, showing you how its played through a fun interactive way. I want the user to enjoy learning the game through the exciting text to create a story like feel to a simple game.
 
 ## User stories
 
